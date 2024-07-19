@@ -63,8 +63,6 @@ public class MainActivity extends AppCompatActivity {
                             "Preencha os campos corretamente",
                             Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
         dialog.setNegativeButton("Sem Gorjeta", new DialogInterface.OnClickListener() {
@@ -89,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
                             "Preencha os campos corretamente",
                             Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
         dialog.create();
