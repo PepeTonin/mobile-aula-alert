@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,10 +16,10 @@ public class MainActivity extends AppCompatActivity {
 
     TextView tituloValorTotal;
     TextInputEditText editTextValorTotal;
-    TextView tituloNumPessoas;
-    TextInputEditText editTextNumPessoas;
-    TextView tituloPorcGorjeta;
-    TextInputEditText editTextPorcGorjeta;
+    TextView tvQntdePessoas;
+    SeekBar seekBarQntdePessoas;
+    TextView tvPorcGorjeta;
+    SeekBar seekBarPorcGorjeta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +27,39 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         tituloValorTotal = (TextView) findViewById(R.id.tituloValorTotal);
-        tituloNumPessoas = (TextView) findViewById(R.id.tituloNumPessoas);
-        tituloPorcGorjeta = (TextView) findViewById(R.id.tituloPorcGorjeta);
         editTextValorTotal = (TextInputEditText) findViewById(R.id.editTextValorTotal);
-        editTextNumPessoas = (TextInputEditText) findViewById(R.id.editTextNumPessoas);
-        editTextPorcGorjeta = (TextInputEditText) findViewById(R.id.editTextPorcGorjeta);
+
+        tvQntdePessoas = (TextView) findViewById(R.id.tvQntdePessoas);
+        seekBarQntdePessoas = (SeekBar) findViewById(R.id.seekBarQntdePessoas);
+
+        tvPorcGorjeta = (TextView) findViewById(R.id.tvPorcGorjeta);
+        seekBarPorcGorjeta = (SeekBar) findViewById(R.id.seekBarPorcGorjeta);
+
+        seekBarQntdePessoas.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvQntdePessoas.setText(Integer.toString(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        seekBarPorcGorjeta.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvPorcGorjeta.setText(Integer.toString(progress) + " %");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
     }
     
     public void calcularValorPorPessoa(View view) {
@@ -44,9 +73,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     float valorTotal = Float.parseFloat(editTextValorTotal.getText().toString());
-                    int numPessoas = Integer.parseInt(editTextNumPessoas.getText().toString());
-                    float porcGorjeta = Float.parseFloat(editTextPorcGorjeta.getText().toString());
-                    porcGorjeta = porcGorjeta / 100;
+                    int numPessoas = seekBarQntdePessoas.getProgress();
+                    float porcGorjeta = ((float) seekBarPorcGorjeta.getProgress()) / 100;
                     if (numPessoas > 0) {
                         float valorPorPessoaComGorjeta = (valorTotal * (1 + porcGorjeta)) / numPessoas;
                         String valorFormatado = String.format("%.2f",valorPorPessoaComGorjeta);
@@ -70,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     float valorTotal = Float.parseFloat(editTextValorTotal.getText().toString());
-                    int numPessoas = Integer.parseInt(editTextNumPessoas.getText().toString());
+                    int numPessoas = seekBarQntdePessoas.getProgress();
                     if(numPessoas > 0) {
                         float valorPorPessoaSemGorjeta = valorTotal  / numPessoas;
                         String valorFormatado = String.format("%.2f",valorPorPessoaSemGorjeta);
@@ -91,11 +119,5 @@ public class MainActivity extends AppCompatActivity {
         });
         dialog.create();
         dialog.show();
-    }
-
-    public void limparCampos(View view) {
-        editTextValorTotal.setText("");
-        editTextNumPessoas.setText("");
-        editTextPorcGorjeta.setText("");
     }
 }
